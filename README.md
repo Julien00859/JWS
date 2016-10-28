@@ -1,2 +1,2 @@
 # JSM
-Java Web Server
+Java Web Server - School project
