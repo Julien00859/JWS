@@ -1,12 +1,17 @@
 package be.ephec.nsjc.jws.model;
 
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 public class Response {
-    private HashMap<String, String> headers = new HashMap();
+    private HashMap<String, String> headers = new HashMap<String, String>();
     private String body;
-    private ReponseCode HTTPCode;
+    private ResponseCode HTTPCode;
 
     /** Full constructor of Reponse
-     * @param code : the HTTP code
+     * @param HTTPCode : the HTTP code
      * @param headers : a list of HTTP headers
      * @param body : the HTTP body
      */
@@ -17,26 +22,37 @@ public class Response {
     }
 
     /** Constructor of Response without any header
-     * @param code : the HTTP code
+     * @param HTTPCode : the HTTP code
      * @param body : the HTTP body
      */
-    public Response(ResponseCode HTTPCode, char[] body) {
+    public Response(ResponseCode HTTPCode, String body) {
         this.HTTPCode = HTTPCode;
         this.body = body;
     }
 
     /** Constructor of Reponse without any headers and withut body
-     * @param code: the HTTP code
+     * @param HTTPCode: the HTTP code
      */
-    public Response(ResponseCode code) {
-        this.code = code;
+    public Response(ResponseCode HTTPCode) {
+        this.HTTPCode = HTTPCode;
     }
 
     /** Append a header to the current list of headers
      * @param header : the header to append
      */
     public void addHeader(Header header) {
-        this.headers.set(header.label, header.value);
+        this.headers.put(header.getLabel(), header.getValue());
+    }
+
+    /** Remove a header from the current list of headers
+     * @param header : the header to remove
+     * @return : a Header with the label and its value if it exists or null if it doesn't
+     */
+    public Header delHeader(Header header) {
+        if (this.hasHeader(header)) {
+            return this.delHeader(header.getLabel());
+        }
+        return null;
     }
 
     /** Remove a header from the current list of headers
@@ -55,7 +71,7 @@ public class Response {
      * @return : whether the object is in the hashmap or not
      */
     public boolean hasHeader(Header header) {
-        return this.hasHeader(header.label) && this.headers.get(header.label) == header.value;
+        return this.hasHeader(header.getLabel()) && this.headers.get(header.getLabel()) == header.getValue();
     }
 
     /** Check if the label is in the list of headers
@@ -78,11 +94,18 @@ public class Response {
      */
     public String toString() {
         String res = "";
-        res += "HTTP1.1 " + this.HTTPCode.code + " " + this.HTTPCode.desc + "\r\n";
-        for (String label in this.headers) {
-            res += label + " " + this.headers.get(label) + "\r\n"
+        res += "HTTP1.1 " + this.HTTPCode.getCode() + " " + this.HTTPCode.getDescr() + "\r\n";
+
+        Set<String> labels = this.headers.keySet();
+        Iterator<String> it = labels.iterator();
+        String label;
+
+        while(it.hasNext()) {
+            label = it.next();
+            res += label + ": " + this.headers.get(label) + "\r\n";
         }
-        res += this.body;
+
+        res += "\r\n" + this.body;
         return res;
     }
 
