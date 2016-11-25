@@ -6,9 +6,9 @@ public class Header {
 	private String value;
 	
 	/**
-	 * Constructeur
-	 * @param label Le label de l'header
-	 * @param value La valeur de l'header
+	 * Constructor
+	 * @param label Label of the header
+	 * @param value Value of the header
 	 */
 	public Header(String label, String value){
 		this.label = label;
@@ -17,43 +17,37 @@ public class Header {
 	
 	
 	/**
-	 * Retourne le Header sous forme de chaîne de caractères
-	 * @return String dans le format Header [type=Type, label=Label, value=Value]
+	 * 
+	 * @return a String in this template "Header [type=Type, label=Label, value=Value]"
 	 */
 	public String toString() {
 		return "Header [label=" + label + ", value=" + value + "]";
 	}
 	
 	/**
-	 * @return true si l'objet testé est de type Header et que ses propriétés sont identiques à celles de l'instance courante.
+	 * @return a boolean (true if o is an Header and has the same label).
 	 */
 	public boolean equals(Object o){
 		if(o instanceof Header){
 			Header h = (Header) o;
-			return h.label.equals(this.label) && h.value.equals(this.value);
+			return h.label.equals(this.label);
 		}else{
 			return false;
 		}
 	}
 
-
 	/**
-	 * @return Le label de l'Header
+	 * @return the label
 	 */
 	public String getLabel() {
 		return label;
 	}
 
-
 	/**
-	 * @return La valeur de l'Header
+	 * @return the value
 	 */
 	public String getValue() {
 		return value;
 	}
-
-	
-	
-	
 	
 }
