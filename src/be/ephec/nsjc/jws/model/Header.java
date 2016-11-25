@@ -24,9 +24,26 @@ public class Header {
 		return "Header [label=" + label + ", value=" + value + "]";
 	}
 	
+	
+	
+	
+
+	/** 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((label == null) ? 0 : label.hashCode());
+		return result;
+	}
+
+
 	/**
 	 * @return a boolean (true if o is an Header and has the same label).
 	 */
+	@Override
 	public boolean equals(Object o){
 		if(o instanceof Header){
 			Header h = (Header) o;
@@ -35,6 +52,7 @@ public class Header {
 			return false;
 		}
 	}
+
 
 	/**
 	 * @return the label
