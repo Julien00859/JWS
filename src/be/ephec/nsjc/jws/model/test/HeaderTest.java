@@ -15,8 +15,6 @@ public class HeaderTest {
 	public static void setUpClass(){
 		toTest = new Header("Content-Length", "2048");
 	}
-
-	
 	
 	@Test
 	public void testEquals(){
@@ -24,6 +22,8 @@ public class HeaderTest {
 		assertNotEquals(true, toTest.equals(h));
 		assertNotEquals(true, toTest.equals("NotAHeader"));
 		h = new Header("Content-Length", "2048");
+		assertEquals(true, toTest.equals(h));
+		h = new Header("Content-Length", "4096");
 		assertEquals(true, toTest.equals(h));
 	}
 	
