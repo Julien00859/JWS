@@ -1,12 +1,13 @@
 package be.ephec.nsjc.jws.model;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.sun.xml.internal.ws.server.sei.EndpointArgumentsBuilder.Header;
+
 public class Response {
-    private HashMap<String, String> headers = new HashMap<String, String>();
+    private Set<Header> headers = new Set<Header>();
     private String body;
     private ResponseCode HTTPCode;
 
@@ -15,7 +16,7 @@ public class Response {
      * @param headers : a list of HTTP headers
      * @param body : the HTTP body
      */
-    public Response(ResponseCode HTTPCode, HashMap<String, String> headers, String body) {
+    public Response(ResponseCode HTTPCode, Set<Header> headers, String body) {
         this.HTTPCode = HTTPCode;
         this.headers = headers;
         this.body = body;
@@ -41,45 +42,54 @@ public class Response {
      * @param header : the header to append
      */
     public void addHeader(Header header) {
-        this.headers.put(header.getLabel(), header.getValue());
+        this.headers.add(header);
     }
 
     /** Remove a header from the current list of headers
      * @param header : the header to remove
-     * @return : a Header with the label and its value if it exists or null if it doesn't
      */
-    public Header delHeader(Header header) {
-        if (this.hasHeader(header)) {
-            return this.delHeader(header.getLabel());
-        }
-        return null;
+    public void delHeader(Header header) {
+    	this.headers.remove(header);
     }
-
-    /** Remove a header from the current list of headers
-     * @param label : the header label to remove
-     * @return : a Header with the label and its value if it exists or null if it doesn't
+    
+    /** Remove a label from the current list of headers
+     * @param label : the label
      */
-    public Header delHeader(String label) {
-        if (this.headers.containsKey(label)) {
-            return new Header(label, this.headers.remove(label));
-        }
-        return null;
+    public void delHeader(String label) {
+    	Iterator<Header> it = this.headers.iterator();
+    	Header header;
+    	
+    	while(it.hasNext()) {
+    		header = it.next();
+    		if (header.getLabel().equals(label)) {
+    			this.headers.remove(header);
+    		}
+    	}
     }
 
     /** Check if the header is in the list of headers
      * @param header : the header that will be checked
-     * @return : whether the object is in the hashmap or not
+     * @return : whether the object is in the set or not
      */
     public boolean hasHeader(Header header) {
-        return this.hasHeader(header.getLabel()) && this.headers.get(header.getLabel()) == header.getValue();
+    	return this.headers.contains(header);
     }
 
     /** Check if the label is in the list of headers
-     * @param headerLabel : the label that will be checked
-     * @return : whether the label is in the hashmap or not
+     * @param label : the label that will be checked
+     * @return : whether a header for the label is in the set or not
      */
-    public boolean hasHeader(String headerLabel) {
-        return this.headers.containsKey(headerLabel);
+    public boolean hasHeader(String label) {
+        Iterator<Header> it = this.headers.iterator();
+        Header header;
+        
+        while (it.hasNext()) {
+        	header = it.next();
+        	if (header.getLabel().equals(label)) {
+        		return true;
+        	}
+        }
+        return false;
     }
 
     /** Convert the response to a sendable format
@@ -96,13 +106,12 @@ public class Response {
         String res = "";
         res += "HTTP1.1 " + this.HTTPCode.getCode() + " " + this.HTTPCode.getDescr() + "\r\n";
 
-        Set<String> labels = this.headers.keySet();
-        Iterator<String> it = labels.iterator();
-        String label;
+        Iterator<Header> it = this.headers.iterator();
+        Header header;
 
         while(it.hasNext()) {
-            label = it.next();
-            res += label + ": " + this.headers.get(label) + "\r\n";
+            header = it.next();
+            res += header.getLabel() + ": " + header.getValue() + "\r\n";
         }
 
         res += "\r\n" + this.body;
@@ -121,5 +130,28 @@ public class Response {
     }
     public ResponseCode getHTTPCode() {
         return this.HTTPCode;
+    }
+    
+    @Orverride
+    public boolean equals(Object other) {
+    	if (other == null) return false;
+    	if (other == this) return true;
+    	if (other.getClass() != this.getClass()) return false;
+    	
+    	Response otherRes = (Response) other;
+    	
+    	if (!this.HTTPCode.equals(otherRes.HTTPCode)) return false;
+    	if (!this.body.equals(otherRes.body)) return false;
+    	if (this.headers.size() != otherRes.headers.size()) return false;
+    	
+    	Iterator it<Header> = this.headers.iterator();
+    	Header header;
+    	
+    	while (it.hasNext()) {
+    		header = it.next();
+    		if (!otherRes.headers.contains(header)) return false;
+    	}
+    	
+    	return true;
     }
 }

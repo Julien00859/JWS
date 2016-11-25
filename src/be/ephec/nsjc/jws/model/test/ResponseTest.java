@@ -4,7 +4,7 @@ import be.ephec.nsjc.jws.model.Header;
 import be.ephec.nsjc.jws.model.Response;
 import be.ephec.nsjc.jws.model.ResponseCode;
 
-import java.util.HashMap;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -19,14 +19,20 @@ public class ResponseTest {
 
         Header headerContentType = new Header("Content-Type", "text/html; charset=UTF-8");
 
-        HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put(headerContentType.getLabel(), headerContentType.getValue());
+        Set<Header> headers = new Set<Header>();
+        headers.add(headerContentType);
 
         res = new Response(ResponseCode.OK, headers, "<!DOCTYPE html>\r\n<html>\r\n\t<body>\r\n\t\tHello world !\r\n\t</body>\r\n</html>");
     }
 
     @org.junit.Test
     public void addHeader() throws Exception {
+        Header headerContentLength = new Header("Content-Length", "50");
+
+        assertFalse(res.hasHeader(headerContentLength));
+        res.addHeader(headerContentLength.getLabel());
+        assertTrue(res.hasHeader(headerContentLength));
+    	
     }
 
     @org.junit.Test
@@ -36,12 +42,12 @@ public class ResponseTest {
 
         // Remove a header label that's not in the response
         assertFalse(res.hasHeader(headerContentLength.getLabel()));
-        assertEquals(null, res.delHeader(headerContentLength.getLabel()));
+        res.delHeader(headerContentLength.getLabel());
         assertFalse(res.hasHeader(headerContentLength.getLabel()));
 
         // Remove a header label that's in the response
         assertTrue(res.hasHeader(headerContentType.getLabel()));
-        assertEquals(headerContentType, res.delHeader(headerContentType.getLabel()));
+        res.delHeader(headerContentType.getLabel());
         assertFalse(res.hasHeader(headerContentType.getLabel()));
 
     }
@@ -53,12 +59,12 @@ public class ResponseTest {
 
         // Remove a header that's not in the response
         assertFalse(res.hasHeader(headerContentTypePlain));
-        assertEquals(null, res.delHeader(headerContentTypePlain));
+        res.delHeader(headerContentTypePlain);
         assertFalse(res.hasHeader(headerContentTypePlain));
 
         // Remove a header that's in the response
         assertTrue(res.hasHeader(headerContentTypeHTML));
-        assertEquals(headerContentTypeHTML, res.delHeader(headerContentTypeHTML));
+        res.delHeader(headerContentTypeHTML);
         assertFalse(res.hasHeader(headerContentTypeHTML));
     }
 
@@ -67,8 +73,8 @@ public class ResponseTest {
         Header headerContentType = new Header("Content-Type", "text/html; charset=UTF-8");
         Header headerContentLength = new Header("Content-Length", "50");
 
-        assertFalse(res.hasHeader(headerContentLength.getLabel()));
         assertTrue(res.hasHeader(headerContentType.getLabel()));
+        assertFalse(res.hasHeader(headerContentLength.getLabel()));
     }
 
     @org.junit.Test
