@@ -22,7 +22,7 @@ public class ResponseTest {
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put(headerContentType.getLabel(), headerContentType.getValue());
 
-        res = new Response(ResponseCode.OK, headers, "<!DOCTYPE html>\r\n<html>\r\n\t<body>\r\n\t\tHello world !\r\n\t</body></html>");
+        res = new Response(ResponseCode.OK, headers, "<!DOCTYPE html>\r\n<html>\r\n\t<body>\r\n\t\tHello world !\r\n\t</body>\r\n</html>");
     }
 
     @org.junit.Test
@@ -48,8 +48,8 @@ public class ResponseTest {
 
     @org.junit.Test
     public void delHeade1r() throws Exception {
-        Header headerContentTypePlain = new Header("Content-Type", "text/html; charset=UTF-8");
-        Header headerContentTypeHTML = new Header("Content-Type", "text/plain; charset=UTF-8");
+        Header headerContentTypePlain = new Header("Content-Type", "text/plain; charset=UTF-8");
+        Header headerContentTypeHTML = new Header("Content-Type", "text/html; charset=UTF-8");
 
         // Remove a header that's not in the response
         assertFalse(res.hasHeader(headerContentTypePlain));
@@ -73,9 +73,8 @@ public class ResponseTest {
 
     @org.junit.Test
     public void hasHeader1() throws Exception {
-        Header headerContentTypePlain = new Header("Content-Type", "text/html; charset=UTF-8");
-        Header headerContentTypeHTML = new Header("Content-Type", "text/plain; charset=UTF-8");
-
+        Header headerContentTypePlain = new Header("Content-Type", "text/plain; charset=UTF-8");
+        Header headerContentTypeHTML = new Header("Content-Type", "text/html; charset=UTF-8");
         assertFalse(res.hasHeader(headerContentTypePlain));
         assertTrue(res.hasHeader(headerContentTypeHTML));
 
@@ -84,13 +83,13 @@ public class ResponseTest {
     @org.junit.Test
     public void testToString() throws Exception {
         String[] expected = {
-                "HTTP1.1 200 ok",
+                "HTTP1.1 200 OK",
                 "Content-Type: text/html; charset=UTF-8",
                 "",
                 "<!DOCTYPE html>",
                 "<html>",
                 "    <body>",
-                "        Hello World !",
+                "        Hello world !",
                 "    </body>",
                 "</html>"
         };
