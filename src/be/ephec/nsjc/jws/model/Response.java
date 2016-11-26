@@ -119,6 +119,7 @@ public class Response {
     }
 
     public void setBody(String body) {
+    	this.addHeader(new Header("Content-Length", String.valueOf(body.length())));
         this.body = body;
     }
     public String getBody() {
