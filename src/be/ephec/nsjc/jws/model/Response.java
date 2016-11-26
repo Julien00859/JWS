@@ -1,13 +1,13 @@
 package be.ephec.nsjc.jws.model;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.sun.xml.internal.ws.server.sei.EndpointArgumentsBuilder.Header;
 
 public class Response {
-    private Set<Header> headers = new Set<Header>();
+    private Set<Header> headers = new HashSet<Header>();
     private String body;
     private ResponseCode HTTPCode;
 
@@ -132,7 +132,7 @@ public class Response {
         return this.HTTPCode;
     }
     
-    @Orverride
+    @Override
     public boolean equals(Object other) {
     	if (other == null) return false;
     	if (other == this) return true;
@@ -144,7 +144,7 @@ public class Response {
     	if (!this.body.equals(otherRes.body)) return false;
     	if (this.headers.size() != otherRes.headers.size()) return false;
     	
-    	Iterator it<Header> = this.headers.iterator();
+    	Iterator<Header> it = this.headers.iterator();
     	Header header;
     	
     	while (it.hasNext()) {
