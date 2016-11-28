@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class Response {
+public class Response{
     private Set<Header> headers = new HashSet<Header>();
     private String body;
     private ResponseCode HTTPCode;

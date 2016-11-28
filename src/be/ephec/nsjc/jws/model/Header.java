@@ -67,5 +67,23 @@ public class Header {
 	public String getValue() {
 		return value;
 	}
+
+
+	/**
+	 * @param label the label to set
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	
 	
 }

@@ -3,7 +3,7 @@ package be.ephec.nsjc.jws.model;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Request {
+public class Request{
 
 	private String method;
 	private String requestURI;
