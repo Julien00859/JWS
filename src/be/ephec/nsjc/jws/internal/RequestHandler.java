@@ -39,7 +39,8 @@ public class RequestHandler {
 
 	private Request parseBody(Request r) throws IOException {
 		// TODO
-		if(r.getMethod() == "GET"){
+		if(r.getMethod().equals("GET")){
+			
 			//WE CAN SAFELY IGNORE BODY
 			return r;
 		}else{
