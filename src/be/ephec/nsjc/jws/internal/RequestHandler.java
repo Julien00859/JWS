@@ -37,8 +37,22 @@ public class RequestHandler {
 		}
 	}
 
-	private Request parseBody(Request r) {
+	private Request parseBody(Request r) throws IOException {
 		// TODO
+		if(r.getMethod() == "GET"){
+			//WE CAN SAFELY IGNORE BODY
+			return r;
+		}else{
+			String body = "";
+			String line = this.reader.readLine();
+			while(line != null && line.length() != 0){
+				body += line+"\r\n";
+				line = this.reader.readLine();
+			}
+			body = body.substring(0, body.length()-2);
+			r.setBody(body);
+		}
+		
 		return r;
 	}
 
@@ -60,8 +74,11 @@ public class RequestHandler {
 				String[] rawHeader = line.split(": ");
 				last = new Header(rawHeader[0], rawHeader[1]);
 			}
+			line = this.reader.readLine();
 		}
-		r.addHeader(last);
+		if(last != null){
+			r.addHeader(last);
+		}
 		return r;
 	}
 	
