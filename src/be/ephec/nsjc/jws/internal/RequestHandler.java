@@ -57,9 +57,11 @@ public class RequestHandler {
 				if(last != null){
 					r.addHeader(last);
 				}
-				
+				String[] rawHeader = line.split(": ");
+				last = new Header(rawHeader[0], rawHeader[1]);
 			}
 		}
+		r.addHeader(last);
 		return r;
 	}
 	
