@@ -22,32 +22,36 @@ public class ServerThread implements Runnable {
 	
 	public ServerThread(HTTPTrace trace){
 		this.trace = trace;
+		this.running = true;
 	}
 	
 	@Override
 	public void run() {
 		try {
 			serverSocket = new ServerSocket(6587);
-			while(true){
+			while(running){
 				Socket clientSocket = serverSocket.accept();
-				//TODO Log connection
+				for(JWSController ctrl : controllers){
+					ctrl.logToView("New Connection from "+clientSocket.getRemoteSocketAddress().toString());
+				}
 				BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				//TODO Parse the request
 				RequestHandler reqHandler = new RequestHandler(bf);
 				Request req = reqHandler.parseRequest();
+				int counter = trace.addRequest(req);
 				//TODO Create the response
 				if(req != null){
 					ResponseBuilder respBuilder = new ResponseBuilder(req);
 					Response res = respBuilder.buildResponse();
 					if(res != null){
 						clientSocket.getOutputStream().write(res.toByteArray());
+						trace.addResponse(counter, res);
 					}
 				}
-				//TODO Log response
+				trace.reset();
 				
 				
 			}
-			//serverSocket.close();
+			serverSocket.close();
 		} catch (IOException e) {
 			//TODO Log error
 			System.exit(1);
