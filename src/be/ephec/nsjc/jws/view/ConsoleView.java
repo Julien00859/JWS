@@ -8,10 +8,12 @@ import java.util.Scanner;
 
 public class ConsoleView extends AbstractView{
 
+    private Scanner sc;
     private boolean running = true;
 
     public ConsoleView(HTTPTrace trace, JWSController controller) {
         super(trace, controller);
+        this.sc = new Scanner(System.in);
     }
 
     @Override
@@ -30,14 +32,12 @@ public class ConsoleView extends AbstractView{
     }
 
     private class InputReader implements Runnable {
-        private Scanner sc;
 
         @Override
         public void run() {
-            this.sc = new Scanner(System.in);
             while (running) {
                 try {
-                    ConsoleView.this.controller.handleInput(this.sc.nextLine().trim());
+                    ConsoleView.this.controller.handleInput(sc.nextLine().trim());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
