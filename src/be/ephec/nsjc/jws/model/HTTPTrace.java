@@ -7,8 +7,8 @@ public class HTTPTrace extends Observable{
 	private boolean gotRequest;
 	private boolean madeResponse;
 	
-	ArrayList<Request> requestList;
-	ArrayList<Response> responseList;
+	private ArrayList<Request> requestList;
+	private ArrayList<Response> responseList;
 	
 	public int counter;
 	
@@ -47,6 +47,38 @@ public class HTTPTrace extends Observable{
 		}
 		
 	}
+
+	/**
+	 * @return the gotRequest
+	 */
+	public boolean hasGotRequest() {
+		return gotRequest;
+	}
+
+	/**
+	 * @return the madeResponse
+	 */
+	public boolean hasMadeResponse() {
+		return madeResponse;
+	}
+
+	/**
+	 * @return the requestList
+	 */
+	public ArrayList<Request> getRequestList() {
+		return requestList;
+	}
+
+	/**
+	 * @return the responseList
+	 */
+	public ArrayList<Response> getResponseList() {
+		return responseList;
+	}
+	
+	
+	
+	
 	
 	
 }
