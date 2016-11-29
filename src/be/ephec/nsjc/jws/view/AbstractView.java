@@ -23,9 +23,4 @@ public abstract class AbstractView implements Observer{
 	public abstract void update(Observable o, Object arg);
 	
 	public abstract void log(String log);
-	
-
-	
-	
-	
 }
