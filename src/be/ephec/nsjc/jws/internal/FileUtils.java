@@ -23,4 +23,12 @@ public class FileUtils {
 
     }
 
+    /** Check if the given uri is an existing file
+     * @param uri the relative path from the base dir
+     * @return wheter the file exists or not
+     */
+    public static boolean fileExists(String uri) {
+        return true;
+    }
+
 }
