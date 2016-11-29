@@ -61,7 +61,6 @@ public class RequestHandler {
 		String line = this.reader.readLine();
 		Header last = null;
 		while(line != null && line.length() != 0){
-			System.out.println("dans la boucle");
 			if(line.startsWith("\t")){
 				if(last == null){
 					//BAD!

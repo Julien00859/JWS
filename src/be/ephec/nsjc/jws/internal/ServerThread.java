@@ -22,7 +22,6 @@ public class ServerThread implements Runnable {
 	
 	public ServerThread(HTTPTrace trace){
 		this.trace = trace;
-		System.out.println("Constructor");
 	}
 	
 	@Override
@@ -30,16 +29,12 @@ public class ServerThread implements Runnable {
 		try {
 			serverSocket = new ServerSocket(6587);
 			while(true){
-				System.out.println("Boucle");
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("accept");
 				//TODO Log connection
 				BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				System.out.println("Buffer");
 				//TODO Parse the request
 				RequestHandler reqHandler = new RequestHandler(bf);
 				Request req = reqHandler.parseRequest();
-				System.out.println("req parsed");
 				//TODO Create the response
 				if(req != null){
 					ResponseBuilder respBuilder = new ResponseBuilder(req);
@@ -48,10 +43,8 @@ public class ServerThread implements Runnable {
 						clientSocket.getOutputStream().write(res.toByteArray());
 					}
 				}
-				System.out.println("request built");
 				//TODO Log response
 				
-				System.out.println("sent");
 				
 			}
 			//serverSocket.close();
