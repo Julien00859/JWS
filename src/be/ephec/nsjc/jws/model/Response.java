@@ -104,7 +104,7 @@ public class Response{
      */
     public String toString() {
         String res = "";
-        res += "HTTP1.1 " + this.HTTPCode.getCode() + " " + this.HTTPCode.getDescr() + "\r\n";
+        res += "HTTP/1.1 " + this.HTTPCode.getCode() + " " + this.HTTPCode.getDescr() + "\r\n";
 
         Iterator<Header> it = this.headers.iterator();
         Header header;
