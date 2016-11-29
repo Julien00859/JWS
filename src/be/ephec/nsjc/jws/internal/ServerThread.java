@@ -14,7 +14,7 @@ import be.ephec.nsjc.jws.model.Response;
 
 public class ServerThread implements Runnable {
 	
-	private boolean running = true;
+	private boolean running;
 	ServerSocket serverSocket;
 	HTTPTrace trace;
 	
@@ -22,25 +22,39 @@ public class ServerThread implements Runnable {
 	
 	public ServerThread(HTTPTrace trace){
 		this.trace = trace;
+		System.out.println("Constructor");
 	}
 	
 	@Override
 	public void run() {
 		try {
-			serverSocket = new ServerSocket(8080);
-			while(running){
+			serverSocket = new ServerSocket(6587);
+			while(true){
+				System.out.println("Boucle");
 				Socket clientSocket = serverSocket.accept();
+				System.out.println("accept");
 				//TODO Log connection
 				BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				System.out.println("Buffer");
 				//TODO Parse the request
-				Request req = null;
+				RequestHandler reqHandler = new RequestHandler(bf);
+				Request req = reqHandler.parseRequest();
+				System.out.println("req parsed");
 				//TODO Create the response
-				Response res = null;
+				if(req != null){
+					ResponseBuilder respBuilder = new ResponseBuilder(req);
+					Response res = respBuilder.buildResponse();
+					if(res != null){
+						clientSocket.getOutputStream().write(res.toByteArray());
+					}
+				}
+				System.out.println("request built");
 				//TODO Log response
-				clientSocket.getOutputStream().write(res.toByteArray());
+				
+				System.out.println("sent");
 				
 			}
-			serverSocket.close();
+			//serverSocket.close();
 		} catch (IOException e) {
 			//TODO Log error
 			System.exit(1);
