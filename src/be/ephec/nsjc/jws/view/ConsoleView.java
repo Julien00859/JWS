@@ -14,6 +14,7 @@ public class ConsoleView extends AbstractView{
     public ConsoleView(HTTPTrace trace, JWSController controller) {
         super(trace, controller);
         this.sc = new Scanner(System.in);
+        new Thread(new InputReader()).start();
     }
 
     @Override
