@@ -16,11 +16,15 @@ public class RequestHandler {
 	}
 	
 	public Request parseRequest() throws IOException{
+		if(!this.reader.ready()){
+			System.out.println("buffer not ready");
+		}
 		String requestLine = this.reader.readLine();
 		if(requestLine == null){
 			//BAD! 
 			return null;
 		}else{
+			System.out.println("rqline found");
 			String[] reqSplit = requestLine.split(" ");
 			if(reqSplit.length != 3){
 				//BAD!

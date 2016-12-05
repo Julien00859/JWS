@@ -31,6 +31,7 @@ public class ServerThread implements Runnable {
 			serverSocket = new ServerSocket(6587);
 			while(running){
 				Socket clientSocket = serverSocket.accept();
+				long start = System.currentTimeMillis();
 				for(JWSController ctrl : controllers){
 					ctrl.logToView("New Connection from "+clientSocket.getRemoteSocketAddress().toString());
 				}
@@ -42,14 +43,13 @@ public class ServerThread implements Runnable {
 				if(req != null){
 					ResponseBuilder respBuilder = new ResponseBuilder(req);
 					Response res = respBuilder.buildResponse();
+					trace.addResponse(counter, res);
 					if(res != null){
 						clientSocket.getOutputStream().write(res.toByteArray());
-						trace.addResponse(counter, res);
 					}
 				}
 				trace.reset();
-				
-				
+				long end = System.currentTimeMillis();
 			}
 			serverSocket.close();
 		} catch (IOException e) {

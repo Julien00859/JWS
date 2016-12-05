@@ -14,6 +14,7 @@ public class Main {
 		ConsoleView view = new ConsoleView(trace, controller);
 		controller.setView(view);
 		ServerThread st = new ServerThread(trace);
+		st.addController(controller);
 		Thread t = new Thread(st);
 		t.start();
 		t.join();

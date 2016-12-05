@@ -24,6 +24,7 @@ public class HTTPTrace extends Observable{
 	}
 	
 	public void reset(){
+		System.out.println("call reset");
 		gotRequest = madeResponse = false;
 		this.counter++;
 	}
