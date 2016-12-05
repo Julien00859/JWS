@@ -2,7 +2,6 @@ package be.ephec.nsjc.jws.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.IllegalFormatException;
 
 import be.ephec.nsjc.jws.model.Header;
 import be.ephec.nsjc.jws.model.Request;
@@ -17,14 +16,12 @@ public class RequestHandler {
 	
 	public Request parseRequest() throws IOException{
 		if(!this.reader.ready()){
-			System.out.println("buffer not ready");
 		}
 		String requestLine = this.reader.readLine();
 		if(requestLine == null){
 			//BAD! 
 			return null;
 		}else{
-			System.out.println("rqline found");
 			String[] reqSplit = requestLine.split(" ");
 			if(reqSplit.length != 3){
 				//BAD!

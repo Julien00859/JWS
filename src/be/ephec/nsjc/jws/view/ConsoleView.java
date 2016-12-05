@@ -21,9 +21,9 @@ public class ConsoleView extends AbstractView{
     public void update(Observable o, Object arg) {
         int count = (Integer) arg;
         if (this.trace.hasMadeResponse()) {
-            //System.out.println(this.trace.getResponseList().get(count));
+            System.out.println(this.trace.getResponseList().get(count));
         } else {
-            //System.out.println(this.trace.getRequestList().get(count));
+            System.out.println(this.trace.getRequestList().get(count));
         }
     }
 
