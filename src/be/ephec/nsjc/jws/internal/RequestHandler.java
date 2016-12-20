@@ -9,14 +9,21 @@ import be.ephec.nsjc.jws.model.Request;
 public class RequestHandler {
 	
 	BufferedReader reader;
-	
+
+	/**
+	 * Given a http request text to read, prepare the request to be parsed
+	 * @param reader the request that will be parsed
+	 */
 	public RequestHandler(BufferedReader reader){
 		this.reader = reader;
 	}
-	
+
+	/**
+	 * Parse a request text and fill a Request object
+	 * @return a Request object
+	 * @throws IOException read fail
+	 */
 	public Request parseRequest() throws IOException{
-		if(!this.reader.ready()){
-		}
 		String requestLine = this.reader.readLine();
 		if(requestLine == null){
 			//BAD! 
@@ -38,6 +45,12 @@ public class RequestHandler {
 		}
 	}
 
+	/**
+	 * Parse the body of the request text to fill object
+	 * @param r a request object
+	 * @return the same request object
+	 * @throws IOException read fail
+	 */
 	private Request parseBody(Request r) throws IOException {
 		// TODO
 		if(!r.getMethod().equals("POST")){
@@ -58,6 +71,12 @@ public class RequestHandler {
 		return r;
 	}
 
+	/**
+	 * Parse the headers of the request to fill the object
+	 * @param r a request object
+	 * @return the same request object
+	 * @throws IOException read fail
+	 */
 	private Request parseHeaders(Request r) throws IOException {
 		String line = this.reader.readLine();
 		Header last = null;
