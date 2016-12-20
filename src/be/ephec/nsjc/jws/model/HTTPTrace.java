@@ -17,7 +17,10 @@ public class HTTPTrace extends Observable{
 	
 	private Object lockReq = new Object();
 	private Object lockRes = new Object();
-	
+
+	/**
+	 * Create an empty HTTPTrace with default values
+	 */
 	public HTTPTrace(){
 		this.counter = 0;
 		this.gotRequest = false;
@@ -25,12 +28,20 @@ public class HTTPTrace extends Observable{
 		this.requestList = FXCollections.observableArrayList();
 		this.responseList = FXCollections.observableArrayList();
 	}
-	
+
+	/**
+	 * Prepare the trace to handle the next request
+	 */
 	public void reset(){
 		this.gotRequest = this.madeResponse = false;
 		this.counter++;
 	}
-	
+
+	/**
+	 * Add a request object to the trace
+	 * @param req the request
+	 * @return the value of the counter
+	 */
 	public int addRequest(Request req){
 		synchronized (lockReq) {
 			this.requestList.add(counter, req);
@@ -40,7 +51,12 @@ public class HTTPTrace extends Observable{
 			return this.counter;
 		}
 	}
-	
+
+	/**
+	 * Add a response object to the trace
+	 * @param counter the value returned by the addRequest (used to sync req/res)
+	 * @param res the response
+	 */
 	public void addResponse(int counter, Response res){
 		synchronized (lockRes) {
 			this.responseList.add(counter, res);
