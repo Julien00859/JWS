@@ -59,7 +59,7 @@ public class ServerThread implements Runnable {
 			}
 			serverSocket.close();
 		} catch (SocketException e){
-			//Ci pa grav mon frère
+			//Happens on close due to accept, nothing harmful
 		} catch (IOException e) {
 			//TODO Log error
 			e.printStackTrace();
