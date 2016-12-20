@@ -6,15 +6,18 @@ import be.ephec.nsjc.jws.model.HTTPTrace;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class ConsoleView extends AbstractView{
+public class ConsoleView implements AbstractView{
 
     private Scanner sc;
     private boolean running = true;
+    private HTTPTrace trace;
+	private JWSController controller;
 
     public ConsoleView(HTTPTrace trace, JWSController controller) {
-        super(trace, controller);
         this.sc = new Scanner(System.in);
+        this.trace = trace;
         new Thread(new InputReader()).start();
+        trace.addObserver(this);
     }
 
     @Override

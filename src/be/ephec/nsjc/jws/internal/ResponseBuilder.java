@@ -2,6 +2,7 @@ package be.ephec.nsjc.jws.internal;
 
 import java.io.IOException;
 
+import be.ephec.nsjc.jws.model.Header;
 import be.ephec.nsjc.jws.model.Request;
 import be.ephec.nsjc.jws.model.Response;
 import be.ephec.nsjc.jws.model.ResponseCode;
@@ -21,6 +22,7 @@ public class ResponseBuilder {
 		case "GET":
 			if(FileUtils.fileExists(path)){
 				Response resp = new Response(ResponseCode.OK);
+				resp.addHeader(new Header("Content-Type", "text/html"));
 				try {
 					resp.setBody(new String(FileUtils.getFileContent(path)));
 				} catch (IOException e) {

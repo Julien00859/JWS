@@ -46,13 +46,29 @@ public class RequestHandler {
 			return r;
 		}else{
 			String body = "";
+			String boundary = null;
+			if(r.hasHeader("Content-Type") && r.getHeader("Content-Type").getValue().startsWith("multipart/mixed")){
+				boundary = r.getHeader("Content-Type").getValue().split("boundary=")[1];
+			}
 			String line = this.reader.readLine();
+			if(boundary != null){
+				while(line != null && line.length() != 0 && line.equals("--"+boundary)){
+					line = this.reader.readLine();
+				}
+				//Ignoring multipart headers...
+				parseHeaders(r);
+			}
 			while(line != null && line.length() != 0){
+				//If boundary, then stop at end
+				if(boundary != null && line.equals("--"+boundary+"--")){
+					break;
+				}
 				body += line+"\r\n";
 				line = this.reader.readLine();
 			}
 			body = body.substring(0, body.length()-2);
 			r.setBody(body);
+			
 		}
 		
 		return r;

@@ -1,14 +1,17 @@
 package be.ephec.nsjc.jws.model;
 
-import java.util.ArrayList;
 import java.util.Observable;
+
+import javafx.beans.value.ObservableBooleanValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class HTTPTrace extends Observable{
 	private boolean gotRequest;
 	private boolean madeResponse;
 	
-	private ArrayList<Request> requestList;
-	private ArrayList<Response> responseList;
+	private ObservableList<Request> requestList;
+	private ObservableList<Response> responseList;
 	
 	public int counter;
 	
@@ -19,8 +22,8 @@ public class HTTPTrace extends Observable{
 		counter = 0;
 		gotRequest = false;
 		madeResponse = false;
-		requestList = new ArrayList<Request>();
-		responseList = new ArrayList<Response>();
+		requestList = FXCollections.observableArrayList();
+		responseList = FXCollections.observableArrayList();
 	}
 	
 	public void reset(){
@@ -65,14 +68,14 @@ public class HTTPTrace extends Observable{
 	/**
 	 * @return the requestList
 	 */
-	public ArrayList<Request> getRequestList() {
+	public ObservableList<Request> getRequestList() {
 		return requestList;
 	}
 
 	/**
 	 * @return the responseList
 	 */
-	public ArrayList<Response> getResponseList() {
+	public ObservableList<Response> getResponseList() {
 		return responseList;
 	}
 	

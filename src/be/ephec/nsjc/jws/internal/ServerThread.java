@@ -11,10 +11,13 @@ import be.ephec.nsjc.jws.controller.JWSController;
 import be.ephec.nsjc.jws.model.HTTPTrace;
 import be.ephec.nsjc.jws.model.Request;
 import be.ephec.nsjc.jws.model.Response;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
 
 public class ServerThread implements Runnable {
 	
 	private boolean running;
+	private SimpleBooleanProperty observableRunning;
 	ServerSocket serverSocket;
 	HTTPTrace trace;
 	
@@ -23,6 +26,7 @@ public class ServerThread implements Runnable {
 	public ServerThread(HTTPTrace trace){
 		this.trace = trace;
 		this.running = true;
+		this.observableRunning = new SimpleBooleanProperty(true);
 	}
 	
 	@Override
@@ -48,6 +52,7 @@ public class ServerThread implements Runnable {
 						clientSocket.getOutputStream().write(res.toByteArray());
 					}
 				}
+				clientSocket.close();
 				trace.reset();
 				long end = System.currentTimeMillis();
 			}
@@ -71,8 +76,19 @@ public class ServerThread implements Runnable {
 	 */
 	public void setRunning(boolean running) {
 		this.running = running;
+		this.observableRunning.setValue(running);
 	}
 	
+	
+	/**
+	 * @return the observable running
+	 */
+	public ObservableBooleanValue getObservableRunning() {
+		return observableRunning;
+	}
+
+	
+
 	/**
 	 * Add a controller to the server thread
 	 * @param controller the controller
