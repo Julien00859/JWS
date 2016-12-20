@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import be.ephec.nsjc.jws.controller.JWSController;
@@ -57,8 +58,11 @@ public class ServerThread implements Runnable {
 				long end = System.currentTimeMillis();
 			}
 			serverSocket.close();
+		} catch (SocketException e){
+			//Ci pa grav mon frère
 		} catch (IOException e) {
 			//TODO Log error
+			e.printStackTrace();
 			System.exit(1);
 		}
 		
@@ -75,6 +79,14 @@ public class ServerThread implements Runnable {
 	 * @param running - true if the server should be started, false if stopped
 	 */
 	public void setRunning(boolean running) {
+		if(running == false){
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		this.running = running;
 		this.observableRunning.setValue(running);
 	}

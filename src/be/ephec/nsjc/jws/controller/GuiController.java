@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 
 import be.ephec.nsjc.jws.internal.ServerThread;
 import be.ephec.nsjc.jws.model.HTTPTrace;
@@ -79,13 +80,11 @@ public class GuiController {
 						locale = InetAddress.getByName("0:0:0:0:0:0:0:1");
 						Socket s = new Socket(locale, 6587);
 	            		String path = urlInput.getText().split(":6587")[1];
-	            		String toSend = "POST "+path+" HTTP/1.1"+
-	            				"Content-Type: multipart/mixed; boundary=boundary42\r\n"+
+	            		String toSend = "POST "+path+" HTTP/1.1\r\n"+
+	            				"User-Agent: JWS GUI\r\n"+
 	            				"\r\n"+
-	            				"--boundary42\r\n"+
-	            				"\r\n"+
-	            				"Contenu du fichier\r\n"+
-	            				"--boundary42--\r\n";
+	            				new String(Files.readAllBytes(file.toPath()));
+	            		System.out.println(toSend);
 	            		s.getOutputStream().write(toSend.getBytes());
 	            		s.close();
 					} catch (UnknownHostException e) {
@@ -99,7 +98,24 @@ public class GuiController {
                 }
 				break;
 			case "DELETE":
-				;
+				InetAddress locale;
+				try {
+					locale = InetAddress.getByName("0:0:0:0:0:0:0:1");
+					Socket s = new Socket(locale, 6587);
+            		String path = urlInput.getText().split(":6587")[1];
+            		String toSend = "DELETE "+path+" HTTP/1.1\r\n"+
+            				"User-Agent: JWS GUI\r\n"+
+            				"\r\n";
+            		System.out.println(toSend);
+            		s.getOutputStream().write(toSend.getBytes());
+            		s.close();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 		}
 		
@@ -108,6 +124,7 @@ public class GuiController {
 	@FXML
 	public void handleStopButton(ActionEvent event){
 		server.setRunning(false);
+		logArea.setText(logArea.getText()+"\n"+"Server is now down");
 	}
 	
 	@FXML
@@ -115,6 +132,14 @@ public class GuiController {
 		server.setRunning(true);
 		Thread t = new Thread(server);
 		t.start();
+		logArea.setText(logArea.getText()+"\n"+"Server is now up");
+	}
+	
+	@FXML
+	public void handleRestartButton(ActionEvent event){
+		logArea.setText(logArea.getText()+"\n"+"Server is now restarting");
+		handleStopButton(event);
+		handleStartButton(event);
 	}
 	
 	public void setView(GuiView view){
@@ -151,6 +176,7 @@ public class GuiController {
 		startButton.setDisable(true);
 		shutdownButton.setDisable(false);
 		rebootButton.setDisable(false);
+		serverState.setText("ON");
 		server.getObservableRunning().addListener(new ChangeListener<Boolean>() {
 
 			@Override
@@ -158,7 +184,11 @@ public class GuiController {
 				startButton.setDisable(newValue);
 				shutdownButton.setDisable(!newValue);
 				rebootButton.setDisable(!newValue);
-				
+				if(newValue){
+					serverState.setText("ON");
+				}else{
+					serverState.setText("OFF");
+				}
 			}
 			
 		});

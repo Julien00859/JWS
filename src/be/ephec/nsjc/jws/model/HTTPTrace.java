@@ -19,34 +19,34 @@ public class HTTPTrace extends Observable{
 	private Object lockRes = new Object();
 	
 	public HTTPTrace(){
-		counter = 0;
-		gotRequest = false;
-		madeResponse = false;
-		requestList = FXCollections.observableArrayList();
-		responseList = FXCollections.observableArrayList();
+		this.counter = 0;
+		this.gotRequest = false;
+		this.madeResponse = false;
+		this.requestList = FXCollections.observableArrayList();
+		this.responseList = FXCollections.observableArrayList();
 	}
 	
 	public void reset(){
-		gotRequest = madeResponse = false;
+		this.gotRequest = this.madeResponse = false;
 		this.counter++;
 	}
 	
 	public int addRequest(Request req){
 		synchronized (lockReq) {
-			requestList.add(counter, req);
-			gotRequest = true;
-			setChanged();
-			notifyObservers(this.counter);
+			this.requestList.add(counter, req);
+			this.gotRequest = true;
+			this.setChanged();
+			this.notifyObservers(this.counter);
 			return this.counter;
 		}
 	}
 	
 	public void addResponse(int counter, Response res){
 		synchronized (lockRes) {
-			responseList.add(counter, res);
-			madeResponse = true;
-			setChanged();
-			notifyObservers(counter);
+			this.responseList.add(counter, res);
+			this.madeResponse = true;
+			this.setChanged();
+			this.notifyObservers(counter);
 		}
 		
 	}
@@ -55,28 +55,28 @@ public class HTTPTrace extends Observable{
 	 * @return the gotRequest
 	 */
 	public boolean hasGotRequest() {
-		return gotRequest;
+		return this.gotRequest;
 	}
 
 	/**
 	 * @return the madeResponse
 	 */
 	public boolean hasMadeResponse() {
-		return madeResponse;
+		return this.madeResponse;
 	}
 
 	/**
 	 * @return the requestList
 	 */
 	public ObservableList<Request> getRequestList() {
-		return requestList;
+		return this.requestList;
 	}
 
 	/**
 	 * @return the responseList
 	 */
 	public ObservableList<Response> getResponseList() {
-		return responseList;
+		return this.responseList;
 	}
 	
 	

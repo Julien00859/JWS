@@ -38,7 +38,7 @@ public class Main {
 		guiController.addHTTPTrace(trace);
 		guiController.setServer(st);
 		
-		t.join();
+		guiThread.join();
 	}
 
 }
