@@ -23,13 +23,20 @@ public class ServerThread implements Runnable {
 	HTTPTrace trace;
 	
 	ArrayList<JWSController> controllers = new ArrayList<JWSController>();
-	
+
+	/**
+	 * Given a HTTPTrace where requests will be stored, prepare the server to be ran
+	 * @param trace the HTTPTrace to store request
+	 */
 	public ServerThread(HTTPTrace trace){
 		this.trace = trace;
 		this.running = true;
 		this.observableRunning = new SimpleBooleanProperty(true);
 	}
-	
+
+	/**
+	 * Launch the server and wait for clients, when a client is connected, wait a request, handle the request and loop
+	 */
 	@Override
 	public void run() {
 		try {
@@ -79,7 +86,7 @@ public class ServerThread implements Runnable {
 	 * @param running - true if the server should be started, false if stopped
 	 */
 	public void setRunning(boolean running) {
-		if(running == false){
+		if(!running){
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
